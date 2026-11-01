@@ -44,45 +44,48 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
 
   const allBrandsWithDiscounts = await getBrandsWithDiscounts(store)
 
-  // Filter to brands that have discounts in this club
   const clubBrands = allBrandsWithDiscounts.filter((b) =>
     b.discounts.some((d) => d.clubId === clubId)
   )
 
-  // Find exclusive brands
   const exclusiveCount = clubBrands.filter((b) => b.discounts.length === 1).length
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-        <Link href="/" className="hover:text-blue-600 transition-colors">בית</Link>
+      <nav className="flex items-center gap-2 text-xs font-semibold text-zinc-400 mb-6">
+        <Link href="/" className="hover:text-zinc-900 transition-colors">בית</Link>
         <span>/</span>
-        <Link href="/clubs" className="hover:text-blue-600 transition-colors">מועדונים</Link>
+        <Link href="/clubs" className="hover:text-zinc-900 transition-colors">מועדונים</Link>
         <span>/</span>
-        <span className="text-gray-900 font-medium">{club.name}</span>
+        <span className="text-zinc-900">{club.name}</span>
       </nav>
 
-      {/* Club Header Banner */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm mb-8">
+      {/* Club Hero Banner */}
+      <div className="relative bg-white rounded-3xl border border-zinc-200/80 p-6 sm:p-8 shadow-xs mb-10 overflow-hidden">
+        <div
+          className="absolute top-0 right-0 left-0 h-1.5"
+          style={{ backgroundColor: club.color }}
+        />
+
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center font-bold text-2xl text-white shadow-sm flex-shrink-0"
+              className="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl text-white shadow-md flex-shrink-0"
               style={{ backgroundColor: club.color }}
             >
               {club.name[0]}
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl sm:text-3xl font-black text-gray-900">
+                <h1 className="text-2xl sm:text-3xl font-black text-zinc-950">
                   {club.name}
                 </h1>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 font-bold">
                   {club.nameEn}
                 </span>
               </div>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-xs text-zinc-500 mt-1 font-medium">
                 נמצאו {clubBrands.length} הטבות פעילות
                 {exclusiveCount > 0 && ` • ${exclusiveCount} בלעדיים למועדון זה`}
               </p>
@@ -95,7 +98,7 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
                 href={club.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-800 transition-colors"
               >
                 <span>לאתר המועדון</span>
                 <span aria-hidden="true">&nearr;</span>
@@ -103,7 +106,7 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
             )}
             <Link
               href={`/compare?club1=${club.id}`}
-              className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 transition-colors border border-blue-100"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white transition-colors shadow-xs"
             >
               <span>השוואת מועדון</span>
               <span aria-hidden="true">&larr;</span>

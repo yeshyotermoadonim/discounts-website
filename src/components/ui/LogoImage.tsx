@@ -1,6 +1,5 @@
 'use client'
 
-// Smart image component with text fallback for brand logos
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -12,43 +11,47 @@ interface LogoImageProps {
   size?: LogoSize
 }
 
-const sizeConfig: Record<LogoSize, { px: number; textClass: string; containerClass: string }> = {
-  sm: { px: 40, textClass: 'text-base font-bold', containerClass: 'w-10 h-10' },
-  md: { px: 64, textClass: 'text-xl font-bold', containerClass: 'w-16 h-16' },
-  lg: { px: 96, textClass: 'text-3xl font-bold', containerClass: 'w-24 h-24' },
+const sizeConfig: Record<LogoSize, { px: number; containerClass: string; textClass: string }> = {
+  sm: { px: 40, containerClass: 'w-10 h-10 rounded-xl', textClass: 'text-sm font-bold' },
+  md: { px: 64, containerClass: 'w-14 h-14 rounded-2xl', textClass: 'text-lg font-bold' },
+  lg: { px: 96, containerClass: 'w-20 h-20 rounded-2xl', textClass: 'text-2xl font-black' },
 }
 
 export function LogoImage({ logoUrl, brandName, size = 'md' }: LogoImageProps) {
   const [error, setError] = useState(false)
   const [loaded, setLoaded] = useState(false)
-  const { px, textClass, containerClass } = sizeConfig[size]
+  const { px, containerClass, textClass } = sizeConfig[size]
 
   const firstChar = brandName.charAt(0).toUpperCase()
 
   if (!logoUrl || error) {
-    // Text fallback with brand initial
     return (
       <div
-        className={`${containerClass} rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center flex-shrink-0`}
+        className={`${containerClass} bg-gradient-to-tr from-indigo-50 to-violet-100/80 border border-indigo-100 flex items-center justify-center flex-shrink-0 shadow-xs`}
         aria-label={brandName}
       >
-        <span className={`${textClass} text-blue-700 select-none`}>{firstChar}</span>
+        <span className={`${textClass} bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent select-none`}>
+          {firstChar}
+        </span>
       </div>
     )
   }
 
   return (
-    <div className={`${containerClass} relative rounded-xl overflow-hidden flex-shrink-0`}>
-      {/* Skeleton loader */}
+    <div
+      className={`${containerClass} relative bg-white border border-zinc-100 p-1 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-xs`}
+    >
       {!loaded && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-xl" />
+        <div className="absolute inset-0 bg-zinc-100 animate-pulse rounded-2xl" />
       )}
       <Image
         src={logoUrl}
         alt={`לוגו ${brandName}`}
         width={px}
         height={px}
-        className={`object-contain w-full h-full transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`object-contain max-h-full max-w-full rounded-xl transition-opacity duration-300 ${
+          loaded ? 'opacity-100' : 'opacity-0'
+        }`}
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
         unoptimized

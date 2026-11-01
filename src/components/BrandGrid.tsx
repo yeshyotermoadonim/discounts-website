@@ -1,6 +1,5 @@
 'use client'
 
-// Client component for the interactive brand grid with filtering, search, and sorting
 import { useState, useMemo } from 'react'
 import { BrandWithDiscounts, Club, Category, SortOption, FilterState } from '@/types'
 import { filterBrands, sortBrands, defaultFilters } from '@/lib/utils'
@@ -13,7 +12,7 @@ interface BrandGridProps {
   brands: BrandWithDiscounts[]
   clubs: Club[]
   categories: Category[]
-  initialClubId?: string // Pre-filter by a specific club (used on club pages)
+  initialClubId?: string
 }
 
 export function BrandGrid({ brands, clubs, categories, initialClubId }: BrandGridProps) {
@@ -21,7 +20,7 @@ export function BrandGrid({ brands, clubs, categories, initialClubId }: BrandGri
     ...defaultFilters(),
     clubIds: initialClubId ? [initialClubId] : [],
   })
-  const [sort, setSort] = useState<SortOption>('name')
+  const [sort, setSort] = useState<SortOption>('best-discount')
 
   const filtered = useMemo(() => {
     return sortBrands(filterBrands(brands, filters), sort)
@@ -35,7 +34,7 @@ export function BrandGrid({ brands, clubs, categories, initialClubId }: BrandGri
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {/* Search bar */}
       <SearchBar
         value={filters.search}
@@ -52,22 +51,29 @@ export function BrandGrid({ brands, clubs, categories, initialClubId }: BrandGri
         onSortChange={setSort}
       />
 
-      {/* Results count */}
-      <p className="text-sm text-gray-500">
-        {filtered.length === brands.length ? (
-          <span>{brands.length} מותגים</span>
-        ) : (
-          <span>
-            {filtered.length} מותגים מתוך {brands.length}
+      {/* Results summary header */}
+      <div className="flex items-center justify-between pt-2 px-1">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold text-zinc-950">
+            {filtered.length === brands.length ? (
+              <span>נמצאו {brands.length} מותגים</span>
+            ) : (
+              <span>מציג {filtered.length} מתוך {brands.length} מותגים</span>
+            )}
           </span>
-        )}
-      </p>
+          {filters.search && (
+            <span className="text-xs font-medium text-zinc-400">
+              עבור &quot;{filters.search}&quot;
+            </span>
+          )}
+        </div>
+      </div>
 
       {/* Grid or empty state */}
       {filtered.length === 0 ? (
         <EmptyState onClearFilters={handleClearFilters} />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((brand) => (
             <BrandCard key={brand.id} brand={brand} categories={categories} />
           ))}

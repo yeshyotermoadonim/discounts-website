@@ -1,4 +1,3 @@
-// Small pill badge showing a club name with its brand color
 import { Club } from '@/types'
 
 interface ClubBadgeProps {
@@ -7,19 +6,21 @@ interface ClubBadgeProps {
 }
 
 export function ClubBadge({ club, size = 'sm' }: ClubBadgeProps) {
-  const sizeClass =
-    size === 'lg'
-      ? 'px-4 py-1.5 text-base font-bold'
-      : size === 'md'
-      ? 'px-3 py-1 text-sm font-semibold'
-      : 'px-2 py-0.5 text-xs font-medium'
+  const sizeClasses = {
+    sm: 'text-xs px-2.5 py-0.5 gap-1.5',
+    md: 'text-xs px-3 py-1 gap-2 font-medium',
+    lg: 'text-sm px-4 py-1.5 gap-2 font-semibold',
+  }
 
   return (
     <span
-      className={`inline-flex items-center rounded-full shadow-xs ${sizeClass} text-white`}
-      style={{ backgroundColor: club.color }}
+      className={`inline-flex items-center rounded-full font-semibold bg-white border border-zinc-200/80 text-zinc-800 shadow-2xs ${sizeClasses[size]}`}
     >
-      {club.name}
+      <span
+        className="w-2 h-2 rounded-full flex-shrink-0"
+        style={{ backgroundColor: club.color }}
+      />
+      <span>{club.name}</span>
     </span>
   )
 }

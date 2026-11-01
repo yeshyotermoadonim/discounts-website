@@ -1,7 +1,5 @@
 'use client'
 
-// Comparison tool: side-by-side view of two clubs' discounts
-// Mobile-friendly: stacked cards instead of a wide table
 import { useState, useMemo } from 'react'
 import { Club, BrandWithDiscounts, Category } from '@/types'
 import { LogoImage } from '@/components/ui/LogoImage'
@@ -41,7 +39,7 @@ export function ComparisonTable({
         const d2 = brand.discounts.find((d) => d.clubId === club2Id) || null
         return { brand, d1, d2 }
       })
-      .filter((row) => row.d1 || row.d2) // Only show brands available in at least one club
+      .filter((row) => row.d1 || row.d2)
   }, [brands, club1Id, club2Id])
 
   const filtered = useMemo(() => {
@@ -69,56 +67,91 @@ export function ComparisonTable({
   ]
 
   return (
-    <div className="space-y-6">
-      {/* Club selectors */}
-      <div className="grid grid-cols-2 gap-4">
-        {[
-          { value: club1Id, onChange: setClub1Id, label: 'מועדון ראשון' },
-          { value: club2Id, onChange: setClub2Id, label: 'מועדון שני' },
-        ].map((selector, i) => {
-          const selectedClub = activeClubs.find((c) => c.id === selector.value)
-          return (
-            <div key={i} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-              <label className="block text-xs font-semibold text-gray-500 mb-2">
-                {selector.label}
-              </label>
+    <div className="space-y-8">
+      {/* Club Selector Deck */}
+      <div className="relative bg-white rounded-3xl border border-zinc-200/80 p-6 shadow-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+          {/* Club 1 */}
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider">
+              מועדון ראשון
+            </label>
+            <div className="relative">
               <select
-                value={selector.value}
-                onChange={(e) => selector.onChange(e.target.value)}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={club1Id}
+                onChange={(e) => setClub1Id(e.target.value)}
+                className="w-full text-sm font-bold text-zinc-900 bg-zinc-50 border border-zinc-200/80 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer appearance-none pl-10"
                 dir="rtl"
               >
                 {activeClubs.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.name}
+                    {c.name} ({c.nameEn})
                   </option>
                 ))}
               </select>
-              {selectedClub && (
-                <div className="mt-3">
-                  <ClubBadge club={selectedClub} size="md" />
-                </div>
-              )}
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
-          )
-        })}
+            {club1 && (
+              <div className="pt-1">
+                <ClubBadge club={club1} size="md" />
+              </div>
+            )}
+          </div>
+
+          {/* Club 2 */}
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider">
+              מועדון שני
+            </label>
+            <div className="relative">
+              <select
+                value={club2Id}
+                onChange={(e) => setClub2Id(e.target.value)}
+                className="w-full text-sm font-bold text-zinc-900 bg-zinc-50 border border-zinc-200/80 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer appearance-none pl-10"
+                dir="rtl"
+              >
+                {activeClubs.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name} ({c.nameEn})
+                  </option>
+                ))}
+              </select>
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+            {club2 && (
+              <div className="pt-1">
+                <ClubBadge club={club2} size="md" />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Tab buttons */}
+      {/* Segmented Tabs */}
       <div className="flex flex-wrap gap-2">
         {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
               tab === t.key
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-white border border-gray-200 text-gray-600 hover:border-blue-400 hover:text-blue-600'
+                ? 'bg-zinc-950 text-white shadow-md shadow-zinc-950/10'
+                : 'bg-white border border-zinc-200/80 text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50'
             }`}
           >
             {t.label}
             <span
-              className={`mr-1.5 text-xs font-bold ${tab === t.key ? 'text-blue-100' : 'text-gray-400'}`}
+              className={`mr-1.5 text-[11px] font-extrabold ${
+                tab === t.key ? 'text-zinc-400' : 'text-zinc-400'
+              }`}
             >
               ({t.count})
             </span>
@@ -126,77 +159,119 @@ export function ComparisonTable({
         ))}
       </div>
 
-      {/* Column headers (desktop only) */}
-      {club1 && club2 && (
-        <div className="hidden sm:grid grid-cols-[1fr_auto_auto] gap-4 items-center px-4 pb-1">
-          <span className="text-xs font-semibold text-gray-500">מותג</span>
-          <div className="text-center">
-            <ClubBadge club={club1} size="md" />
-          </div>
-          <div className="text-center">
-            <ClubBadge club={club2} size="md" />
-          </div>
-        </div>
-      )}
-
-      {/* Brand rows */}
-      <div className="space-y-3">
+      {/* Brand Comparison List */}
+      <div className="space-y-3.5">
         {filtered.length === 0 && (
-          <div className="text-center py-16 text-gray-500">
-            <span className="text-5xl mb-4 block">🤷</span>
-            <p className="text-lg font-medium">אין מותגים בקטגוריה זו</p>
+          <div className="text-center py-16 bg-white rounded-3xl border border-zinc-200 text-zinc-500">
+            <span className="text-4xl mb-3 block">🔍</span>
+            <p className="text-base font-bold text-zinc-800">אין מותגים התואמים לחיתוך זה</p>
           </div>
         )}
+
         {filtered.map(({ brand, d1, d2 }) => {
           const catNames = brand.categories
             .map((id) => categories.find((c) => c.id === id)?.name)
             .filter((n): n is string => Boolean(n))
 
+          const p1 = d1?.discountPercentage ?? -1
+          const p2 = d2?.discountPercentage ?? -1
+
+          const club1Wins = p1 > p2 && p2 !== -1
+          const club2Wins = p2 > p1 && p1 !== -1
+          const isTie = p1 === p2 && p1 > 0
+
           return (
             <div
               key={brand.id}
-              className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm"
+              className="bg-white rounded-3xl border border-zinc-200/80 p-5 sm:p-6 shadow-xs hover:border-indigo-300/60 transition-all duration-200"
             >
-              {/* Mobile layout: stacked */}
-              <div className="flex items-center gap-3 mb-3 sm:mb-0">
-                <LogoImage logoUrl={brand.logoUrl} brandName={brand.name} size="sm" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 truncate">{brand.name}</p>
-                  {catNames.length > 0 && (
-                    <p className="text-xs text-gray-500 truncate">{catNames.join(' · ')}</p>
-                  )}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                {/* Brand info */}
+                <div className="flex items-center gap-3.5">
+                  <LogoImage logoUrl={brand.logoUrl} brandName={brand.name} size="sm" />
+                  <div>
+                    <h3 className="text-base font-black text-zinc-950 truncate">
+                      {brand.name}
+                    </h3>
+                    {catNames.length > 0 && (
+                      <p className="text-xs text-zinc-500 mt-0.5 truncate">
+                        {catNames.join(' · ')}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Compare blocks */}
+                <div className="grid grid-cols-2 sm:flex sm:items-center gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-zinc-100">
+                  {/* Club 1 Box */}
+                  <div className={`p-3 rounded-2xl border text-center sm:w-36 ${
+                    club1Wins
+                      ? 'bg-emerald-50/80 border-emerald-200'
+                      : 'bg-zinc-50/80 border-zinc-100'
+                  }`}>
+                    <span className="block text-[11px] font-bold text-zinc-500 mb-1">
+                      {club1?.name}
+                    </span>
+                    {d1 ? (
+                      <div className="flex items-center justify-center gap-1">
+                        <DiscountBadge discount={d1} highlight={club1Wins} />
+                        {club1Wins && <span className="text-xs">👑</span>}
+                      </div>
+                    ) : (
+                      <span className="text-xs font-semibold text-zinc-400">לא זמין</span>
+                    )}
+                  </div>
+
+                  {/* Club 2 Box */}
+                  <div className={`p-3 rounded-2xl border text-center sm:w-36 ${
+                    club2Wins
+                      ? 'bg-emerald-50/80 border-emerald-200'
+                      : 'bg-zinc-50/80 border-zinc-100'
+                  }`}>
+                    <span className="block text-[11px] font-bold text-zinc-500 mb-1">
+                      {club2?.name}
+                    </span>
+                    {d2 ? (
+                      <div className="flex items-center justify-center gap-1">
+                        <DiscountBadge discount={d2} highlight={club2Wins} />
+                        {club2Wins && <span className="text-xs">👑</span>}
+                      </div>
+                    ) : (
+                      <span className="text-xs font-semibold text-zinc-400">לא זמין</span>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {/* Desktop: inline club columns | Mobile: stacked rows */}
-              <div className="sm:grid sm:grid-cols-[1fr_auto_auto] sm:gap-4 sm:items-center">
-                {/* Brand info already above on mobile */}
-                <div className="hidden sm:block" />
-
-                {/* Club 1 discount */}
-                <div className="flex sm:flex-col items-center justify-between sm:justify-center gap-2 py-2 sm:py-0 border-t sm:border-t-0 border-gray-100 sm:w-28">
-                  <span className="sm:hidden">
-                    {club1 && <ClubBadge club={club1} />}
-                  </span>
-                  {d1 ? (
-                    <DiscountBadge discount={d1} />
-                  ) : (
-                    <span className="text-sm text-gray-400">לא זמין</span>
+              {/* Difference highlight footer */}
+              {(club1Wins || club2Wins || isTie) && (
+                <div className="mt-3 pt-3 border-t border-zinc-100 flex items-center justify-between text-xs">
+                  {club1Wins && (
+                    <span className="font-bold text-emerald-700 inline-flex items-center gap-1">
+                      <span>⚡</span>
+                      <span>{club1?.name} משתלם יותר ב-{(p1 - p2)}%</span>
+                    </span>
                   )}
-                </div>
-
-                {/* Club 2 discount */}
-                <div className="flex sm:flex-col items-center justify-between sm:justify-center gap-2 py-2 sm:py-0 border-t sm:border-t-0 border-gray-100 sm:w-28">
-                  <span className="sm:hidden">
-                    {club2 && <ClubBadge club={club2} />}
-                  </span>
-                  {d2 ? (
-                    <DiscountBadge discount={d2} />
-                  ) : (
-                    <span className="text-sm text-gray-400">לא זמין</span>
+                  {club2Wins && (
+                    <span className="font-bold text-emerald-700 inline-flex items-center gap-1">
+                      <span>⚡</span>
+                      <span>{club2?.name} משתלם יותר ב-{(p2 - p1)}%</span>
+                    </span>
                   )}
+                  {isTie && (
+                    <span className="font-medium text-zinc-500">
+                      הנחה זהה בשני המועדונים
+                    </span>
+                  )}
+
+                  <a
+                    href={`/brands/${brand.id}`}
+                    className="font-bold text-indigo-600 hover:text-indigo-700 mr-auto"
+                  >
+                    לכל הפרטים &larr;
+                  </a>
                 </div>
-              </div>
+              )}
             </div>
           )
         })}
