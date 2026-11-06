@@ -7,20 +7,13 @@ interface FilterBarProps {
   categories: Category[]
   filters: FilterState
   sort: SortOption
+  preserveClubIds?: string[]
   onFilterChange: (filters: FilterState) => void
   onSortChange: (sort: SortOption) => void
 }
 
-const MIN_DISCOUNT_OPTIONS = [
-  { label: 'הכל', value: null },
-  { label: '10%+', value: 10 },
-  { label: '15%+', value: 15 },
-  { label: '20%+', value: 20 },
-]
-
 const SORT_OPTIONS: { label: string; value: SortOption }[] = [
-  { label: 'הנחה גבוהה ביותר', value: 'best-discount' },
-  { label: 'לפי שם (א-ת)', value: 'name' },
+  { label: 'שם', value: 'name' },
   { label: 'מספר מועדונים', value: 'club-count' },
 ]
 
@@ -29,6 +22,7 @@ export function FilterBar({
   categories,
   filters,
   sort,
+  preserveClubIds = [],
   onFilterChange,
   onSortChange,
 }: FilterBarProps) {
@@ -46,184 +40,111 @@ export function FilterBar({
     onFilterChange({ ...filters, categoryIds: next })
   }
 
-  const setMinDiscount = (val: number | null) => {
-    onFilterChange({ ...filters, minDiscount: val })
-  }
-
-  const activeFiltersCount =
-    filters.clubIds.length +
-    filters.categoryIds.length +
-    (filters.minDiscount !== null ? 1 : 0) +
-    (filters.mobileOnly ? 1 : 0) +
-    (filters.search.trim() ? 1 : 0)
-
-  const clearAllFilters = () => {
-    onFilterChange({
-      search: '',
-      clubIds: [],
-      categoryIds: [],
-      minDiscount: null,
-      mobileOnly: false,
-    })
-  }
+  const hasFilters =
+    filters.clubIds.length > preserveClubIds.length ||
+    filters.categoryIds.length > 0 ||
+    filters.onlineOnly ||
+    filters.search.trim().length > 0
 
   return (
-    <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-zinc-200/90 shadow-[0_8px_30px_rgb(0,0,0,0.03)] p-5 sm:p-7 space-y-6">
-      {/* Top Deck: Club Filter Chips */}
-      <div>
-        <div className="flex items-center justify-between mb-3.5">
-          <span className="text-xs font-black text-zinc-950 uppercase tracking-wider flex items-center gap-2">
-            <span>מועדוני צרכנות</span>
-            <span className="text-[11px] text-zinc-400 font-semibold">
-              ({filters.clubIds.length > 0 ? `${filters.clubIds.length} מסוננים` : 'כל המועדונים'})
-            </span>
-          </span>
-
-          {activeFiltersCount > 0 && (
+    <div className="rounded-3xl border border-[var(--line)] bg-white p-4 sm:p-5 shadow-[0_10px_30px_rgba(18,21,28,0.04)] space-y-4">
+      <div className="flex flex-wrap items-center gap-2">
+        {clubs.map((club) => {
+          const active = filters.clubIds.includes(club.id)
+          return (
             <button
-              onClick={clearAllFilters}
-              className="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1.5 transition-colors cursor-pointer group"
-            >
-              <span>איפוס מסננים</span>
-              <span className="px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-600 font-mono text-[10px] group-hover:bg-rose-100 transition-colors">
-                {activeFiltersCount}
-              </span>
-            </button>
-          )}
-        </div>
-
-        <div className="flex flex-wrap gap-2.5">
-          {clubs.map((club) => {
-            const active = filters.clubIds.includes(club.id)
-            return (
-              <button
-                key={club.id}
-                onClick={() => toggleClub(club.id)}
-                className={`inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-                  active
-                    ? 'bg-zinc-950 text-white shadow-md shadow-zinc-950/15 scale-102 ring-2 ring-zinc-950/10'
-                    : 'bg-zinc-100/80 text-zinc-700 hover:bg-zinc-200/80 border border-zinc-200/60'
-                }`}
-              >
-                <span
-                  className="w-2.5 h-2.5 rounded-full flex-shrink-0 shadow-2xs"
-                  style={{ backgroundColor: club.color }}
-                />
-                <span>{club.name}</span>
-                {active && (
-                  <span className="text-zinc-400 text-[10px] font-mono">✓</span>
-                )}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Middle Deck: Category Chips */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-black text-zinc-950 uppercase tracking-wider">
-            קטגוריות
-          </span>
-          <span className="text-[11px] text-zinc-400 font-medium">
-            בחירה מהירה
-          </span>
-        </div>
-
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1">
-          {categories.map((cat) => {
-            const active = filters.categoryIds.includes(cat.id)
-            return (
-              <button
-                key={cat.id}
-                onClick={() => toggleCategory(cat.id)}
-                className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 cursor-pointer ${
-                  active
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20 scale-102'
-                    : 'bg-zinc-50 text-zinc-700 border border-zinc-200/80 hover:border-zinc-300 hover:bg-white'
-                }`}
-              >
-                {cat.name}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Control Deck: Min Discount + Mobile Filter + Sort */}
-      <div className="pt-4 border-t border-zinc-100/90 flex flex-wrap items-center justify-between gap-4">
-        {/* Min Discount Segmented Pill */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-zinc-700">הנחה:</span>
-          <div className="inline-flex bg-zinc-100/90 p-1 rounded-full border border-zinc-200/70 shadow-inner">
-            {MIN_DISCOUNT_OPTIONS.map((opt) => {
-              const isActive = filters.minDiscount === opt.value
-              return (
-                <button
-                  key={String(opt.value)}
-                  onClick={() => setMinDiscount(opt.value)}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
-                    isActive
-                      ? 'bg-white text-zinc-950 shadow-xs scale-102'
-                      : 'text-zinc-500 hover:text-zinc-900'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Right Side: Mobile switch & Sort Dropdown */}
-        <div className="flex items-center gap-4 mr-auto">
-          {/* Mobile Only Toggle */}
-          <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={filters.mobileOnly}
-              onChange={(e) =>
-                onFilterChange({ ...filters, mobileOnly: e.target.checked })
+              key={club.id}
+              type="button"
+              onClick={() => toggleClub(club.id)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border"
+              style={
+                active
+                  ? { backgroundColor: club.color, borderColor: club.color, color: '#fff' }
+                  : { backgroundColor: '#fff', borderColor: 'var(--line)', color: 'var(--ink)' }
               }
-              className="sr-only"
-            />
-            <div
-              className={`relative w-8 h-4.5 rounded-full transition-colors duration-200 ${
-                filters.mobileOnly ? 'bg-indigo-600' : 'bg-zinc-200'
-              }`}
             >
-              <div
-                className={`absolute top-0.5 w-3.5 h-3.5 bg-white rounded-full shadow-xs transition-transform duration-200 ${
-                  filters.mobileOnly ? 'translate-x-3.5' : 'translate-x-0.5'
-                }`}
+              <span
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: active ? '#fff' : club.color }}
               />
-            </div>
-            <span className="text-xs font-bold text-zinc-700">
-              באפליקציה בלבד
-            </span>
-          </label>
+              {club.name}
+            </button>
+          )
+        })}
+        {hasFilters && (
+          <button
+            type="button"
+            onClick={() =>
+              onFilterChange({
+                search: '',
+                clubIds: preserveClubIds,
+                categoryIds: [],
+                onlineOnly: false,
+              })
+            }
+            className="text-sm text-[var(--muted)] hover:text-[var(--ink)] px-2"
+          >
+            איפוס
+          </button>
+        )}
+        <label className="mr-auto flex items-center gap-2 text-sm text-[var(--muted)]">
+          <span>מיון</span>
+          <select
+            value={sort}
+            onChange={(event) => onSortChange(event.target.value as SortOption)}
+            className="bg-[#f4f7fb] border border-[var(--line)] rounded-full px-3 py-1 text-[var(--ink)] focus:outline-none"
+          >
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
 
-          {/* Sort Selector */}
-          <div className="relative">
-            <select
-              value={sort}
-              onChange={(e) => onSortChange(e.target.value as SortOption)}
-              className="text-xs font-extrabold text-zinc-800 bg-zinc-100/80 hover:bg-zinc-100 border border-zinc-200/80 rounded-2xl px-3.5 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer appearance-none pl-8"
-              dir="rtl"
-            >
-              {SORT_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <div className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
-        </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={filters.onlineOnly}
+        onClick={() => onFilterChange({ ...filters, onlineOnly: !filters.onlineOnly })}
+        className="w-full sm:w-auto flex items-center justify-between gap-6 rounded-2xl border border-dashed border-[#b7c3d6] bg-[#f6f8fc] px-4 py-3 text-right"
+      >
+        <span>
+          <span className="block text-sm font-medium text-[var(--ink)]">רק מימוש אונליין</span>
+          <span className="block text-xs text-[var(--muted)] mt-0.5">מותגים שאפשר לממש באתר המועדון</span>
+        </span>
+        <span
+          className={`relative h-7 w-12 rounded-full transition-colors ${
+            filters.onlineOnly ? 'bg-[#12151c]' : 'bg-[#d5dce8]'
+          }`}
+        >
+          <span
+            className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow transition-all ${
+              filters.onlineOnly ? 'right-5' : 'right-0.5'
+            }`}
+          />
+        </span>
+      </button>
+
+      <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+        {categories
+          .filter((category) => category.id !== 'other')
+          .map((category) => {
+            const active = filters.categoryIds.includes(category.id)
+            return (
+              <button
+                key={category.id}
+                type="button"
+                onClick={() => toggleCategory(category.id)}
+                className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full ${
+                  active ? 'bg-[#12151c] text-white' : 'bg-[#f4f7fb] text-[var(--muted)] hover:text-[var(--ink)]'
+                }`}
+              >
+                {category.name}
+              </button>
+            )
+          })}
       </div>
     </div>
   )

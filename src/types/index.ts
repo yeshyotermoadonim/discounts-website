@@ -1,5 +1,3 @@
-// Core data types matching the JSON data files
-
 export interface Club {
   id: string
   name: string
@@ -14,7 +12,6 @@ export interface Brand {
   name: string
   categories: string[]
   logoUrl: string | null
-  website: string | null
 }
 
 export interface Category {
@@ -22,53 +19,34 @@ export interface Category {
   name: string
 }
 
-export type DiscountType = 'percentage' | 'fixed-price'
-export type VerificationStatus = 'verified' | 'seed' | 'unverified' | 'outdated'
-
-export interface Discount {
-  id: string
+export interface Listing {
   brandId: string
   clubId: string
-  type: DiscountType
-  discountPercentage: number | null
-  originalPrice: number | null
-  discountedPrice: number | null
-  redemptionUrl: string | null
-  onlineRedemption: boolean | null
-  mobileRedemption: boolean | null
-  sourceUrl: string | null
-  lastVerified: string | null
-  verificationStatus: VerificationStatus
-  _meta: {
-    source: string
-    note: string
-  }
+  online: boolean
+  url: string
 }
 
-// Enriched types used in the UI
-export interface DiscountWithClub extends Discount {
+export interface ListingWithClub extends Listing {
   club: Club
 }
 
-export interface BrandWithDiscounts extends Brand {
-  discounts: DiscountWithClub[]
-  bestDiscount: number | null
+export interface BrandWithListings extends Brand {
+  listings: ListingWithClub[]
   clubCount: number
 }
 
 export interface DataStore {
   clubs: Club[]
   brands: Brand[]
-  discounts: Discount[]
+  listings: Listing[]
   categories: Category[]
 }
 
-export type SortOption = 'name' | 'best-discount' | 'club-count'
+export type SortOption = 'name' | 'club-count'
 
 export interface FilterState {
   search: string
   clubIds: string[]
   categoryIds: string[]
-  minDiscount: number | null
-  mobileOnly: boolean
+  onlineOnly: boolean
 }

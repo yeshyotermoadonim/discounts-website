@@ -27,10 +27,10 @@ export function LogoImage({ logoUrl, brandName, size = 'md' }: LogoImageProps) {
   if (!logoUrl || error) {
     return (
       <div
-        className={`${containerClass} bg-gradient-to-tr from-indigo-50 to-violet-100/80 border border-indigo-100 flex items-center justify-center flex-shrink-0 shadow-xs`}
+        className={`${containerClass} bg-[#f3f4f6] border border-[var(--line)] flex items-center justify-center flex-shrink-0`}
         aria-label={brandName}
       >
-        <span className={`${textClass} bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent select-none`}>
+        <span className={`${textClass} text-[var(--ink)] select-none`}>
           {firstChar}
         </span>
       </div>
@@ -39,7 +39,7 @@ export function LogoImage({ logoUrl, brandName, size = 'md' }: LogoImageProps) {
 
   return (
     <div
-      className={`${containerClass} relative bg-white border border-zinc-100 p-1 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-xs`}
+      className={`${containerClass} relative bg-white border border-[var(--line)] p-1 flex items-center justify-center flex-shrink-0 overflow-hidden`}
     >
       {!loaded && (
         <div className="absolute inset-0 bg-zinc-100 animate-pulse rounded-2xl" />

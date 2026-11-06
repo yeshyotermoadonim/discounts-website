@@ -4,13 +4,12 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title: 'יש יותר מועדונים | מנוע השוואת הנחות מועדוני צרכנות 2030',
+  title: 'יש יותר מועדונים',
   description:
-    'מנוע AI מתקדם להשוואת הנחות ומבצעים מכל מועדוני הצרכנות בישראל: חבר שלי, בהצדעה, ביימי ועוד. השוו מחירים והנחות בזמן אמת וחסכו בכל קנייה.',
-  keywords: 'מועדוני צרכנות, השוואת הנחות, חבר שלי, בהצדעה, ביימי, קופונים, חיסכון, מבצעים, יש יותר מועדונים',
+    'בדקו באילו מועדוני צרכנות מותג זמין: חבר שלי, בהצדעה וביימי אול.',
   openGraph: {
-    title: 'יש יותר מועדונים | השוואת הטבות מועדונים בזמן אמת',
-    description: 'גלו היכן נמצאת ההנחה המשתלמת ביותר עבור המותגים המובילים בישראל',
+    title: 'יש יותר מועדונים',
+    description: 'בדקו באילו מועדונים מותג זמין.',
     locale: 'he_IL',
     type: 'website',
   },
@@ -27,14 +26,14 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#12151c" />
       </head>
-      <body className="min-h-full bg-[#fafbfe] text-zinc-900 flex flex-col font-sans antialiased selection:bg-indigo-500 selection:text-white bg-mesh-canvas">
+      <body className="min-h-full flex flex-col antialiased">
         <Header />
-        <main className="flex-1 relative z-10">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>

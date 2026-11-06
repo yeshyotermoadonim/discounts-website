@@ -1,7 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --font-heebo: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heebo: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --bg: #e7edf6;
+  --ink: #12151c;
+  --muted: #5c6573;
+  --line: #d5dce8;
+  --card: #ffffff;
+  --hever: #0057b7;
+  --buyme: #e63946;
+  --behatsdaa: #1f8a7b;
 }
 
 * {
@@ -15,71 +23,14 @@ html {
 body {
   font-family: var(--font-heebo);
   direction: rtl;
-  background-color: #f8fafc;
-  color: #090d16;
+  background:
+    radial-gradient(900px 280px at 100% -40px, rgba(0, 87, 183, 0.08), transparent 60%),
+    radial-gradient(700px 240px at 0% -20px, rgba(230, 57, 70, 0.06), transparent 55%),
+    var(--bg);
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
 }
 
-/* Futuristic Ambient Mesh Background */
-.bg-mesh-canvas {
-  background-image: 
-    radial-gradient(circle at 15% 10%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 50% 70%, rgba(56, 189, 248, 0.05) 0%, transparent 50%);
-}
-
-.bg-dot-grid {
-  background-size: 28px 28px;
-  background-image: radial-gradient(rgba(148, 163, 184, 0.25) 1px, transparent 1px);
-}
-
-/* Glassmorphism Classes */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(226, 232, 240, 0.85);
-}
-
-.glass-panel-dark {
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Shimmer & Glow Effects */
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.animate-shimmer {
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
-  background-size: 200% 100%;
-  animation: shimmer 2.5s infinite;
-}
-
-@keyframes floatSlow {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-.animate-float {
-  animation: floatSlow 4s ease-in-out infinite;
-}
-
-/* Scrollbar utilities */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
