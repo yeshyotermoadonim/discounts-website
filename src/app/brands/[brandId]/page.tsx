@@ -54,34 +54,36 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs font-semibold text-zinc-400 mb-6">
-        <Link href="/" className="hover:text-zinc-900 transition-colors">בית</Link>
+      <nav className="flex items-center gap-2 text-xs font-bold text-zinc-400 mb-6">
+        <Link href="/" className="hover:text-zinc-950 transition-colors">בית</Link>
         <span>/</span>
-        <span className="text-zinc-900">{brand.name}</span>
+        <span className="text-zinc-950">{brand.name}</span>
       </nav>
 
       {/* Brand Header */}
-      <div className="bg-white rounded-3xl border border-zinc-200/80 p-6 sm:p-8 shadow-xs mb-8">
+      <div className="bg-white/95 backdrop-blur-xl rounded-3xl border border-zinc-200/90 p-6 sm:p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.05)] mb-8">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-right">
-          <LogoImage logoUrl={brand.logoUrl} brandName={brand.name} size="lg" />
+          <div className="shadow-sm rounded-2xl">
+            <LogoImage logoUrl={brand.logoUrl} brandName={brand.name} size="lg" />
+          </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-3xl sm:text-4xl font-black text-zinc-950 mb-2 tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-black text-zinc-950 mb-3 tracking-tight">
               {brand.name}
             </h1>
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-4">
               {categoryNames.map((name) => (
                 <span
                   key={name}
-                  className="px-3 py-1 rounded-full text-xs font-bold bg-zinc-100 text-zinc-700"
+                  className="px-3.5 py-1 rounded-full text-xs font-bold bg-zinc-100 text-zinc-700"
                 >
                   {name}
                 </span>
               ))}
             </div>
             {brand.bestDiscount !== null && (
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-900">
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-emerald-50/90 border border-emerald-200/80 text-emerald-950 shadow-2xs">
                 <span className="text-xs font-bold">הנחה מרבית זמינה:</span>
-                <span className="font-black text-emerald-600 text-lg">
+                <span className="font-black text-emerald-600 text-xl tabular-nums">
                   {brand.bestDiscount}%
                 </span>
               </div>
@@ -91,16 +93,16 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
       </div>
 
       {/* Club Discounts Section */}
-      <div className="bg-white rounded-3xl border border-zinc-200/80 p-6 sm:p-8 shadow-xs mb-8">
+      <div className="bg-white/95 backdrop-blur-xl rounded-3xl border border-zinc-200/90 p-6 sm:p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.05)] mb-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-black text-zinc-950">
+          <h2 className="text-xl font-black text-zinc-950">
             הנחות זמינות לפי מועדון ({brand.discounts.length})
           </h2>
-          <span className="text-xs text-zinc-400">מעודכן לשימוש מיידי</span>
+          <span className="text-xs font-semibold text-zinc-400">מעודכן לשימוש מיידי</span>
         </div>
 
         {brand.discounts.length === 0 ? (
-          <p className="text-zinc-400 text-center py-8 text-sm">
+          <p className="text-zinc-400 text-center py-10 text-sm font-semibold">
             כרגע אין הנחות זמינות עבור מותג זה
           </p>
         ) : (
@@ -113,17 +115,17 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
               return (
                 <div
                   key={discount.id}
-                  className={`p-5 rounded-2xl border transition-all ${
+                  className={`p-6 rounded-2xl border transition-all ${
                     isBest
-                      ? 'border-emerald-200 bg-emerald-50/50 shadow-2xs'
-                      : 'border-zinc-100 bg-zinc-50/60'
+                      ? 'border-emerald-200 bg-emerald-50/60 shadow-sm'
+                      : 'border-zinc-100 bg-zinc-50/80'
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                       <ClubBadge club={discount.club} size="md" />
                       {isBest && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-black px-3 py-1 rounded-full bg-emerald-600 text-white shadow-2xs">
                           <span>👑</span>
                           <span>ההנחה הגבוהה ביותר</span>
                         </span>
@@ -136,8 +138,8 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
                   </div>
 
                   {/* Additional offer details */}
-                  <div className="mt-4 pt-3 border-t border-zinc-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-zinc-600">
-                    <div className="flex items-center gap-1.5 font-medium">
+                  <div className="mt-4 pt-3.5 border-t border-zinc-200/60 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-zinc-600">
+                    <div className="flex items-center gap-2 font-bold">
                       <span className="text-zinc-400">מימוש אונליין:</span>
                       <span>
                         {discount.onlineRedemption === true
@@ -148,11 +150,11 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 font-medium">
-                      <span className="text-zinc-400">מימוש במובייל:</span>
+                    <div className="flex items-center gap-2 font-bold">
+                      <span className="text-zinc-400">מימוש באפליקציה:</span>
                       <span>
                         {discount.mobileRedemption === true
-                          ? '✅ זמין באפליקציה'
+                          ? '✅ זמין במובייל'
                           : discount.mobileRedemption === false
                           ? '❌ לא זמין'
                           : '❓ לא צוין'}
@@ -166,7 +168,7 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
                         href={discount.redemptionUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700"
+                        className="inline-flex items-center gap-1.5 text-xs font-black text-indigo-600 hover:text-indigo-700"
                       >
                         <span>מעבר למימוש ההטבה באתר המועדון</span>
                         <span aria-hidden="true">&larr;</span>
@@ -184,7 +186,7 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
       <div className="text-center">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-xs transition-colors"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-800 font-extrabold text-xs transition-all shadow-xs hover:scale-102"
         >
           <span aria-hidden="true">&rarr;</span>
           <span>חזרה לכל המותגים</span>

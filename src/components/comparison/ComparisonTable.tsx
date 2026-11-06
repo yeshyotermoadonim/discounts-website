@@ -69,18 +69,18 @@ export function ComparisonTable({
   return (
     <div className="space-y-8">
       {/* Club Selector Deck */}
-      <div className="relative bg-white rounded-3xl border border-zinc-200/80 p-6 shadow-xs">
+      <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl border border-zinc-200/90 p-6 sm:p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.05)]">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
           {/* Club 1 */}
-          <div className="space-y-2">
-            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider">
+          <div className="space-y-2.5">
+            <label className="block text-xs font-black text-zinc-600 uppercase tracking-wider">
               מועדון ראשון
             </label>
             <div className="relative">
               <select
                 value={club1Id}
                 onChange={(e) => setClub1Id(e.target.value)}
-                className="w-full text-sm font-bold text-zinc-900 bg-zinc-50 border border-zinc-200/80 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer appearance-none pl-10"
+                className="w-full text-sm font-bold text-zinc-950 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200/90 rounded-2xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer appearance-none pl-10 transition-colors"
                 dir="rtl"
               >
                 {activeClubs.map((c) => (
@@ -103,15 +103,15 @@ export function ComparisonTable({
           </div>
 
           {/* Club 2 */}
-          <div className="space-y-2">
-            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider">
+          <div className="space-y-2.5">
+            <label className="block text-xs font-black text-zinc-600 uppercase tracking-wider">
               מועדון שני
             </label>
             <div className="relative">
               <select
                 value={club2Id}
                 onChange={(e) => setClub2Id(e.target.value)}
-                className="w-full text-sm font-bold text-zinc-900 bg-zinc-50 border border-zinc-200/80 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer appearance-none pl-10"
+                className="w-full text-sm font-bold text-zinc-950 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200/90 rounded-2xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer appearance-none pl-10 transition-colors"
                 dir="rtl"
               >
                 {activeClubs.map((c) => (
@@ -141,15 +141,15 @@ export function ComparisonTable({
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
+            className={`px-5 py-2.5 rounded-full text-xs font-extrabold transition-all duration-200 cursor-pointer ${
               tab === t.key
-                ? 'bg-zinc-950 text-white shadow-md shadow-zinc-950/10'
-                : 'bg-white border border-zinc-200/80 text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50'
+                ? 'bg-zinc-950 text-white shadow-md shadow-zinc-950/15 scale-102'
+                : 'bg-white border border-zinc-200/90 text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50'
             }`}
           >
             {t.label}
             <span
-              className={`mr-1.5 text-[11px] font-extrabold ${
+              className={`mr-1.5 text-[11px] font-black ${
                 tab === t.key ? 'text-zinc-400' : 'text-zinc-400'
               }`}
             >
@@ -160,11 +160,11 @@ export function ComparisonTable({
       </div>
 
       {/* Brand Comparison List */}
-      <div className="space-y-3.5">
+      <div className="space-y-4">
         {filtered.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-3xl border border-zinc-200 text-zinc-500">
+          <div className="text-center py-16 bg-white rounded-3xl border border-dashed border-zinc-200 text-zinc-500">
             <span className="text-4xl mb-3 block">🔍</span>
-            <p className="text-base font-bold text-zinc-800">אין מותגים התואמים לחיתוך זה</p>
+            <p className="text-base font-black text-zinc-800">אין מותגים התואמים לחיתוך זה</p>
           </div>
         )}
 
@@ -183,10 +183,10 @@ export function ComparisonTable({
           return (
             <div
               key={brand.id}
-              className="bg-white rounded-3xl border border-zinc-200/80 p-5 sm:p-6 shadow-xs hover:border-indigo-300/60 transition-all duration-200"
+              className="bg-white/95 backdrop-blur-xl rounded-3xl border border-zinc-200/90 p-5 sm:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:border-indigo-300/80 transition-all duration-200"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                {/* Brand info */}
+                {/* Brand Info */}
                 <div className="flex items-center gap-3.5">
                   <LogoImage logoUrl={brand.logoUrl} brandName={brand.name} size="sm" />
                   <div>
@@ -194,50 +194,50 @@ export function ComparisonTable({
                       {brand.name}
                     </h3>
                     {catNames.length > 0 && (
-                      <p className="text-xs text-zinc-500 mt-0.5 truncate">
+                      <p className="text-xs font-semibold text-zinc-400 mt-0.5 truncate">
                         {catNames.join(' · ')}
                       </p>
                     )}
                   </div>
                 </div>
 
-                {/* Compare blocks */}
+                {/* Compare Blocks */}
                 <div className="grid grid-cols-2 sm:flex sm:items-center gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-zinc-100">
                   {/* Club 1 Box */}
-                  <div className={`p-3 rounded-2xl border text-center sm:w-36 ${
+                  <div className={`p-3.5 rounded-2xl border text-center sm:w-40 transition-colors ${
                     club1Wins
-                      ? 'bg-emerald-50/80 border-emerald-200'
-                      : 'bg-zinc-50/80 border-zinc-100'
+                      ? 'bg-emerald-50/90 border-emerald-300/80 shadow-xs'
+                      : 'bg-zinc-50/80 border-zinc-200/60'
                   }`}>
-                    <span className="block text-[11px] font-bold text-zinc-500 mb-1">
+                    <span className="block text-[11px] font-black text-zinc-600 mb-1">
                       {club1?.name}
                     </span>
                     {d1 ? (
-                      <div className="flex items-center justify-center gap-1">
+                      <div className="flex items-center justify-center gap-1.5">
                         <DiscountBadge discount={d1} highlight={club1Wins} />
                         {club1Wins && <span className="text-xs">👑</span>}
                       </div>
                     ) : (
-                      <span className="text-xs font-semibold text-zinc-400">לא זמין</span>
+                      <span className="text-xs font-bold text-zinc-400">לא זמין</span>
                     )}
                   </div>
 
                   {/* Club 2 Box */}
-                  <div className={`p-3 rounded-2xl border text-center sm:w-36 ${
+                  <div className={`p-3.5 rounded-2xl border text-center sm:w-40 transition-colors ${
                     club2Wins
-                      ? 'bg-emerald-50/80 border-emerald-200'
-                      : 'bg-zinc-50/80 border-zinc-100'
+                      ? 'bg-emerald-50/90 border-emerald-300/80 shadow-xs'
+                      : 'bg-zinc-50/80 border-zinc-200/60'
                   }`}>
-                    <span className="block text-[11px] font-bold text-zinc-500 mb-1">
+                    <span className="block text-[11px] font-black text-zinc-600 mb-1">
                       {club2?.name}
                     </span>
                     {d2 ? (
-                      <div className="flex items-center justify-center gap-1">
+                      <div className="flex items-center justify-center gap-1.5">
                         <DiscountBadge discount={d2} highlight={club2Wins} />
                         {club2Wins && <span className="text-xs">👑</span>}
                       </div>
                     ) : (
-                      <span className="text-xs font-semibold text-zinc-400">לא זמין</span>
+                      <span className="text-xs font-bold text-zinc-400">לא זמין</span>
                     )}
                   </div>
                 </div>
@@ -245,30 +245,31 @@ export function ComparisonTable({
 
               {/* Difference highlight footer */}
               {(club1Wins || club2Wins || isTie) && (
-                <div className="mt-3 pt-3 border-t border-zinc-100 flex items-center justify-between text-xs">
+                <div className="mt-3.5 pt-3 border-t border-zinc-100 flex items-center justify-between text-xs">
                   {club1Wins && (
-                    <span className="font-bold text-emerald-700 inline-flex items-center gap-1">
+                    <span className="font-black text-emerald-700 inline-flex items-center gap-1.5">
                       <span>⚡</span>
                       <span>{club1?.name} משתלם יותר ב-{(p1 - p2)}%</span>
                     </span>
                   )}
                   {club2Wins && (
-                    <span className="font-bold text-emerald-700 inline-flex items-center gap-1">
+                    <span className="font-black text-emerald-700 inline-flex items-center gap-1.5">
                       <span>⚡</span>
                       <span>{club2?.name} משתלם יותר ב-{(p2 - p1)}%</span>
                     </span>
                   )}
                   {isTie && (
-                    <span className="font-medium text-zinc-500">
-                      הנחה זהה בשני המועדונים
+                    <span className="font-bold text-zinc-500">
+                      הנחה זהה בשני המועדונים ({p1}%)
                     </span>
                   )}
 
                   <a
                     href={`/brands/${brand.id}`}
-                    className="font-bold text-indigo-600 hover:text-indigo-700 mr-auto"
+                    className="font-black text-indigo-600 hover:text-indigo-700 mr-auto flex items-center gap-1"
                   >
-                    לכל הפרטים &larr;
+                    <span>לכל הפרטים</span>
+                    <span>&larr;</span>
                   </a>
                 </div>
               )}

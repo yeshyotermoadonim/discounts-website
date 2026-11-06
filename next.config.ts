@@ -4,9 +4,13 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'www.mcc.co.il' },
+      { protocol: 'https', hostname: 'buyme.co.il' },
+      { protocol: 'https', hostname: 'www.buyme.co.il' },
       { protocol: 'https', hostname: 'raw.githubusercontent.com' },
     ],
   },
 }
 
 export default nextConfig
+
+

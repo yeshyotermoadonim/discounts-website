@@ -34,14 +34,14 @@ export function BrandGrid({ brands, clubs, categories, initialClubId }: BrandGri
   }
 
   return (
-    <div className="space-y-6">
-      {/* Search bar */}
+    <div className="space-y-8">
+      {/* Search Input Hero Box */}
       <SearchBar
         value={filters.search}
         onChange={(search) => setFilters((f) => ({ ...f, search }))}
       />
 
-      {/* Filter bar */}
+      {/* Control Filter Deck */}
       <FilterBar
         clubs={clubs}
         categories={categories}
@@ -51,10 +51,10 @@ export function BrandGrid({ brands, clubs, categories, initialClubId }: BrandGri
         onSortChange={setSort}
       />
 
-      {/* Results summary header */}
+      {/* Results Header Status */}
       <div className="flex items-center justify-between pt-2 px-1">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-zinc-950">
+          <span className="text-xs font-black text-zinc-950 px-3 py-1 rounded-full bg-white border border-zinc-200/80 shadow-2xs">
             {filtered.length === brands.length ? (
               <span>נמצאו {brands.length} מותגים</span>
             ) : (
@@ -62,18 +62,18 @@ export function BrandGrid({ brands, clubs, categories, initialClubId }: BrandGri
             )}
           </span>
           {filters.search && (
-            <span className="text-xs font-medium text-zinc-400">
+            <span className="text-xs font-semibold text-zinc-500">
               עבור &quot;{filters.search}&quot;
             </span>
           )}
         </div>
       </div>
 
-      {/* Grid or empty state */}
+      {/* Responsive Cards Grid */}
       {filtered.length === 0 ? (
         <EmptyState onClearFilters={handleClearFilters} />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((brand) => (
             <BrandCard key={brand.id} brand={brand} categories={categories} />
           ))}

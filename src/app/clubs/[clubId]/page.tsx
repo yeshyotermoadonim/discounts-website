@@ -53,16 +53,16 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs font-semibold text-zinc-400 mb-6">
-        <Link href="/" className="hover:text-zinc-900 transition-colors">בית</Link>
+      <nav className="flex items-center gap-2 text-xs font-bold text-zinc-400 mb-6">
+        <Link href="/" className="hover:text-zinc-950 transition-colors">בית</Link>
         <span>/</span>
-        <Link href="/clubs" className="hover:text-zinc-900 transition-colors">מועדונים</Link>
+        <Link href="/clubs" className="hover:text-zinc-950 transition-colors">מועדונים</Link>
         <span>/</span>
-        <span className="text-zinc-900">{club.name}</span>
+        <span className="text-zinc-950">{club.name}</span>
       </nav>
 
       {/* Club Hero Banner */}
-      <div className="relative bg-white rounded-3xl border border-zinc-200/80 p-6 sm:p-8 shadow-xs mb-10 overflow-hidden">
+      <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl border border-zinc-200/90 p-6 sm:p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.05)] mb-10 overflow-hidden">
         <div
           className="absolute top-0 right-0 left-0 h-1.5"
           style={{ backgroundColor: club.color }}
@@ -71,21 +71,21 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="flex items-center gap-5">
             <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl text-white shadow-md flex-shrink-0"
+              className="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl text-white shadow-lg flex-shrink-0"
               style={{ backgroundColor: club.color }}
             >
               {club.name[0]}
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl sm:text-3xl font-black text-zinc-950">
+                <h1 className="text-2xl sm:text-4xl font-black text-zinc-950">
                   {club.name}
                 </h1>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 font-bold">
+                <span className="text-xs px-3 py-1 rounded-full bg-zinc-100 text-zinc-700 font-bold">
                   {club.nameEn}
                 </span>
               </div>
-              <p className="text-xs text-zinc-500 mt-1 font-medium">
+              <p className="text-xs sm:text-sm text-zinc-500 mt-1.5 font-medium">
                 נמצאו {clubBrands.length} הטבות פעילות
                 {exclusiveCount > 0 && ` • ${exclusiveCount} בלעדיים למועדון זה`}
               </p>
@@ -106,7 +106,7 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
             )}
             <Link
               href={`/compare?club1=${club.id}`}
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 text-xs font-black px-5 py-2.5 rounded-full bg-zinc-950 hover:bg-indigo-600 text-white transition-all shadow-md shadow-zinc-950/10"
             >
               <span>השוואת מועדון</span>
               <span aria-hidden="true">&larr;</span>

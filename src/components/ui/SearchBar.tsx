@@ -27,7 +27,7 @@ export function SearchBar({
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => {
       onChange(val)
-    }, 250)
+    }, 200)
   }
 
   const handleClear = () => {
@@ -38,13 +38,13 @@ export function SearchBar({
 
   return (
     <div className="relative w-full max-w-2xl mx-auto">
-      {/* Glow highlight underneath */}
-      <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-indigo-500/10 via-violet-500/10 to-indigo-500/10 blur-md pointer-events-none opacity-80" />
+      {/* 2030 Gradient Aura Glow */}
+      <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-indigo-500/15 via-violet-500/15 to-purple-500/15 blur-lg pointer-events-none opacity-80" />
 
-      {/* Input container */}
-      <div className="relative flex items-center bg-white rounded-2xl border border-zinc-200/80 shadow-lg shadow-zinc-900/5 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all duration-300">
+      {/* Floating Glass Search Input */}
+      <div className="relative flex items-center bg-white/95 backdrop-blur-xl rounded-2xl border border-zinc-200/90 shadow-[0_8px_30px_rgb(0,0,0,0.06)] focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/15 transition-all duration-300">
         {/* Right Search Icon (RTL) */}
-        <div className="flex items-center pr-4.5 pl-2 pointer-events-none text-zinc-400">
+        <div className="flex items-center pr-5 pl-3 pointer-events-none text-zinc-400">
           <svg
             className="w-5 h-5 text-indigo-600"
             fill="none"
@@ -60,7 +60,7 @@ export function SearchBar({
           </svg>
         </div>
 
-        {/* Input */}
+        {/* Input Field */}
         <input
           ref={inputRef}
           type="text"
@@ -68,16 +68,16 @@ export function SearchBar({
           onChange={handleChange}
           placeholder={placeholder}
           dir="rtl"
-          className="w-full py-4 pr-1 pl-12 text-base font-medium text-zinc-950 placeholder:text-zinc-400 bg-transparent focus:outline-none"
+          className="w-full py-4.5 pr-1 pl-14 text-base font-semibold text-zinc-950 placeholder:text-zinc-400 bg-transparent focus:outline-none"
           aria-label="חיפוש מותגים והנחות"
         />
 
-        {/* Clear button or shortcut badge on the left side */}
-        <div className="absolute left-3.5 flex items-center">
+        {/* Clear Button or Modern Pill on the Left */}
+        <div className="absolute left-4 flex items-center">
           {localValue ? (
             <button
               onClick={handleClear}
-              className="p-1.5 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
+              className="p-1.5 rounded-full text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 transition-all cursor-pointer"
               aria-label="נקה חיפוש"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
@@ -85,8 +85,8 @@ export function SearchBar({
               </svg>
             </button>
           ) : (
-            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono font-medium text-zinc-400 bg-zinc-100 border border-zinc-200">
-              חיפוש
+            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono font-bold text-zinc-400 bg-zinc-100 border border-zinc-200">
+              חיפוש מהיר
             </span>
           )}
         </div>

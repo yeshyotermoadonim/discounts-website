@@ -11,10 +11,10 @@ export function CategoryChip({ category, active, onClick }: CategoryChipProps) {
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-all ${
+      className={`inline-flex items-center rounded-full px-4 py-1.5 text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
         active
-          ? 'bg-blue-600 text-white shadow-sm'
-          : 'bg-white text-gray-700 border border-gray-200 hover:border-blue-400 hover:text-blue-600'
+          ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20 scale-102'
+          : 'bg-white text-zinc-700 border border-zinc-200/90 hover:border-zinc-300 hover:bg-zinc-50'
       }`}
     >
       {category.name}
