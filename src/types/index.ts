@@ -33,6 +33,8 @@ export interface ListingWithClub extends Listing {
 export interface BrandWithListings extends Brand {
   listings: ListingWithClub[]
   clubCount: number
+  aliases: string[]
+  sourceIds: string[]
 }
 
 export interface DataStore {
@@ -47,6 +49,7 @@ export type SortOption = 'name' | 'club-count'
 export interface FilterState {
   search: string
   clubIds: string[]
+  excludeClubIds: string[]
   categoryIds: string[]
   onlineOnly: boolean
 }
