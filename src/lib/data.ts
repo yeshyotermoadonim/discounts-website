@@ -1,4 +1,5 @@
 import { Club, Brand, Category, Listing, DataStore, BrandWithListings } from '@/types'
+import { collapseBrands } from '@/lib/collapse'
 import fallbackClubs from '@/data/seed/clubs.json'
 import fallbackBrands from '@/data/seed/brands.json'
 import fallbackListings from '@/data/seed/listings.json'
@@ -41,7 +42,7 @@ export async function getBrandsWithListings(store?: DataStore): Promise<BrandWit
   const { clubs, brands, listings } = data
   const clubMap = new Map(clubs.map((club) => [club.id, club]))
 
-  return brands.map((brand) => {
+  const rows = brands.map((brand) => {
     const brandListings = listings
       .filter((listing) => listing.brandId === brand.id)
       .map((listing) => ({ ...listing, club: clubMap.get(listing.clubId)! }))
@@ -51,6 +52,9 @@ export async function getBrandsWithListings(store?: DataStore): Promise<BrandWit
       ...brand,
       listings: brandListings,
       clubCount: brandListings.length,
+      aliases: [],
+      sourceIds: [brand.id],
     }
   })
+  return collapseBrands(rows)
 }

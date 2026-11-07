@@ -2,14 +2,11 @@
 
 :root {
   --font-heebo: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --bg: #e7edf6;
-  --ink: #12151c;
-  --muted: #5c6573;
-  --line: #d5dce8;
-  --card: #ffffff;
-  --hever: #0057b7;
-  --buyme: #e63946;
-  --behatsdaa: #1f8a7b;
+  --bg: #f3f0e8;
+  --ink: #1c1917;
+  --muted: #78716c;
+  --line: #e4dfd4;
+  --paper: #fffcf7;
 }
 
 * {
@@ -23,18 +20,25 @@ html {
 body {
   font-family: var(--font-heebo);
   direction: rtl;
-  background:
-    radial-gradient(900px 280px at 100% -40px, rgba(0, 87, 183, 0.08), transparent 60%),
-    radial-gradient(700px 240px at 0% -20px, rgba(230, 57, 70, 0.06), transparent 55%),
-    var(--bg);
+  background: var(--bg);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.brand-row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 52px;
 }
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

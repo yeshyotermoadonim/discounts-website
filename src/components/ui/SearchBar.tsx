@@ -28,24 +28,14 @@ export function SearchBar({
   }
 
   return (
-    <div className="relative">
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-        className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#7b8494]"
-      >
-        <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M16 16.5 20 20.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-      <input
-        type="search"
-        value={localValue}
-        onChange={handleChange}
-        placeholder={placeholder}
-        dir="rtl"
-        aria-label="חיפוש מותג"
-        className="w-full rounded-2xl border border-[var(--line)] bg-white py-4 pr-12 pl-4 text-base text-[var(--ink)] shadow-[0_10px_30px_rgba(18,21,28,0.06)] placeholder:text-[#8b93a1] focus:outline-none focus:border-[#12151c]"
-      />
-    </div>
+    <input
+      type="search"
+      value={localValue}
+      onChange={handleChange}
+      placeholder={placeholder}
+      dir="rtl"
+      aria-label="חיפוש מותג"
+      className="min-w-0 flex-1 h-11 border border-[var(--line)] bg-[var(--paper)] px-3 text-[15px] text-[var(--ink)] placeholder:text-[#a39e94] focus:outline-none focus:border-[var(--ink)]"
+    />
   )
 }

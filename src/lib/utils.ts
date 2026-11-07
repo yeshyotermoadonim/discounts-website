@@ -1,4 +1,5 @@
 import { BrandWithListings, FilterState, SortOption } from '@/types'
+import { brandInGroup } from '@/lib/groups'
 
 export function filterBrands(
   brands: BrandWithListings[],
@@ -8,7 +9,9 @@ export function filterBrands(
 
   if (filters.search.trim()) {
     const query = filters.search.trim().toLowerCase()
-    result = result.filter((brand) => brand.name.toLowerCase().includes(query))
+    result = result.filter((brand) =>
+      [brand.name, ...brand.aliases].some((name) => name.toLowerCase().includes(query)),
+    )
   }
 
   if (filters.clubIds.length > 0) {
@@ -17,9 +20,15 @@ export function filterBrands(
     )
   }
 
+  if (filters.excludeClubIds.length > 0) {
+    result = result.filter(
+      (brand) => !brand.listings.some((listing) => filters.excludeClubIds.includes(listing.clubId)),
+    )
+  }
+
   if (filters.categoryIds.length > 0) {
     result = result.filter((brand) =>
-      brand.categories.some((categoryId) => filters.categoryIds.includes(categoryId)),
+      filters.categoryIds.some((groupId) => brandInGroup(brand.categories, groupId)),
     )
   }
 
@@ -28,6 +37,7 @@ export function filterBrands(
       brand.listings.some(
         (listing) =>
           listing.online &&
+          !filters.excludeClubIds.includes(listing.clubId) &&
           (filters.clubIds.length === 0 || filters.clubIds.includes(listing.clubId)),
       ),
     )
@@ -48,6 +58,7 @@ export function defaultFilters(): FilterState {
   return {
     search: '',
     clubIds: [],
+    excludeClubIds: [],
     categoryIds: [],
     onlineOnly: false,
   }

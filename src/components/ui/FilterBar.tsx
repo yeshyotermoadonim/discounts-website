@@ -1,73 +1,106 @@
 'use client'
 
-import { Club, Category, FilterState, SortOption } from '@/types'
+import { useState } from 'react'
+import { Club, FilterState } from '@/types'
+import { CATEGORY_GROUPS } from '@/lib/groups'
 
 interface FilterBarProps {
   clubs: Club[]
-  categories: Category[]
   filters: FilterState
-  sort: SortOption
   preserveClubIds?: string[]
+  showClubs?: boolean
   onFilterChange: (filters: FilterState) => void
-  onSortChange: (sort: SortOption) => void
 }
-
-const SORT_OPTIONS: { label: string; value: SortOption }[] = [
-  { label: 'שם', value: 'name' },
-  { label: 'מספר מועדונים', value: 'club-count' },
-]
 
 export function FilterBar({
   clubs,
-  categories,
   filters,
-  sort,
   preserveClubIds = [],
+  showClubs = true,
   onFilterChange,
-  onSortChange,
 }: FilterBarProps) {
+  const [hideOpen, setHideOpen] = useState(false)
+
   const toggleClub = (clubId: string) => {
-    const next = filters.clubIds.includes(clubId)
-      ? filters.clubIds.filter((id) => id !== clubId)
-      : [...filters.clubIds, clubId]
-    onFilterChange({ ...filters, clubIds: next })
+    const active = filters.clubIds.includes(clubId)
+    onFilterChange({
+      ...filters,
+      clubIds: active ? filters.clubIds.filter((id) => id !== clubId) : [...filters.clubIds, clubId],
+      excludeClubIds: active
+        ? filters.excludeClubIds
+        : filters.excludeClubIds.filter((id) => id !== clubId),
+    })
   }
 
-  const toggleCategory = (catId: string) => {
-    const next = filters.categoryIds.includes(catId)
-      ? filters.categoryIds.filter((id) => id !== catId)
-      : [...filters.categoryIds, catId]
+  const toggleExclude = (clubId: string) => {
+    const active = filters.excludeClubIds.includes(clubId)
+    onFilterChange({
+      ...filters,
+      excludeClubIds: active
+        ? filters.excludeClubIds.filter((id) => id !== clubId)
+        : [...filters.excludeClubIds, clubId],
+      clubIds: active ? filters.clubIds : filters.clubIds.filter((id) => id !== clubId),
+    })
+  }
+
+  const toggleCategory = (groupId: string) => {
+    const next = filters.categoryIds.includes(groupId)
+      ? filters.categoryIds.filter((id) => id !== groupId)
+      : [...filters.categoryIds, groupId]
     onFilterChange({ ...filters, categoryIds: next })
   }
 
   const hasFilters =
     filters.clubIds.length > preserveClubIds.length ||
+    filters.excludeClubIds.length > 0 ||
     filters.categoryIds.length > 0 ||
     filters.onlineOnly ||
     filters.search.trim().length > 0
 
   return (
-    <div className="rounded-3xl border border-[var(--line)] bg-white p-4 sm:p-5 shadow-[0_10px_30px_rgba(18,21,28,0.04)] space-y-4">
-      <div className="flex flex-wrap items-center gap-2">
-        {clubs.map((club) => {
-          const active = filters.clubIds.includes(club.id)
+    <div className="space-y-3">
+      {showClubs && (
+        <>
+          <ClubChoices clubs={clubs} selected={filters.clubIds} onToggle={toggleClub} />
+          <button
+            type="button"
+            aria-expanded={hideOpen}
+            onClick={() => setHideOpen((open) => !open)}
+            className={`min-h-11 text-[13px] ${
+              hideOpen || filters.excludeClubIds.length > 0
+                ? 'text-[var(--ink)] font-medium underline underline-offset-4'
+                : 'text-[var(--muted)]'
+            }`}
+          >
+            הסתר מועדונים
+          </button>
+          {hideOpen && (
+            <div>
+              <p className="mb-2 text-[12px] text-[var(--muted)]">הסתר מותגים שקיימים ב</p>
+              <ClubChoices
+                clubs={clubs}
+                selected={filters.excludeClubIds}
+                onToggle={toggleExclude}
+                struck
+              />
+            </div>
+          )}
+        </>
+      )}
+
+      <div className="flex flex-wrap gap-x-3 gap-y-2">
+        {CATEGORY_GROUPS.map((group) => {
+          const active = filters.categoryIds.includes(group.id)
           return (
             <button
-              key={club.id}
+              key={group.id}
               type="button"
-              onClick={() => toggleClub(club.id)}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border"
-              style={
-                active
-                  ? { backgroundColor: club.color, borderColor: club.color, color: '#fff' }
-                  : { backgroundColor: '#fff', borderColor: 'var(--line)', color: 'var(--ink)' }
-              }
+              onClick={() => toggleCategory(group.id)}
+              className={`min-h-11 text-[13px] ${
+                active ? 'text-[var(--ink)] underline underline-offset-4 font-medium' : 'text-[var(--muted)]'
+              }`}
             >
-              <span
-                className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: active ? '#fff' : club.color }}
-              />
-              {club.name}
+              {group.name}
             </button>
           )
         })}
@@ -78,74 +111,51 @@ export function FilterBar({
               onFilterChange({
                 search: '',
                 clubIds: preserveClubIds,
+                excludeClubIds: [],
                 categoryIds: [],
                 onlineOnly: false,
               })
             }
-            className="text-sm text-[var(--muted)] hover:text-[var(--ink)] px-2"
+            className="min-h-11 text-[13px] text-[var(--ink)]"
           >
             איפוס
           </button>
         )}
-        <label className="mr-auto flex items-center gap-2 text-sm text-[var(--muted)]">
-          <span>מיון</span>
-          <select
-            value={sort}
-            onChange={(event) => onSortChange(event.target.value as SortOption)}
-            className="bg-[#f4f7fb] border border-[var(--line)] rounded-full px-3 py-1 text-[var(--ink)] focus:outline-none"
-          >
-            {SORT_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
       </div>
+    </div>
+  )
+}
 
-      <button
-        type="button"
-        role="switch"
-        aria-checked={filters.onlineOnly}
-        onClick={() => onFilterChange({ ...filters, onlineOnly: !filters.onlineOnly })}
-        className="w-full sm:w-auto flex items-center justify-between gap-6 rounded-2xl border border-dashed border-[#b7c3d6] bg-[#f6f8fc] px-4 py-3 text-right"
-      >
-        <span>
-          <span className="block text-sm font-medium text-[var(--ink)]">רק מימוש אונליין</span>
-          <span className="block text-xs text-[var(--muted)] mt-0.5">מותגים שאפשר לממש באתר המועדון</span>
-        </span>
-        <span
-          className={`relative h-7 w-12 rounded-full transition-colors ${
-            filters.onlineOnly ? 'bg-[#12151c]' : 'bg-[#d5dce8]'
-          }`}
-        >
-          <span
-            className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow transition-all ${
-              filters.onlineOnly ? 'right-5' : 'right-0.5'
+function ClubChoices({
+  clubs,
+  selected,
+  onToggle,
+  struck = false,
+}: {
+  clubs: Club[]
+  selected: string[]
+  onToggle: (clubId: string) => void
+  struck?: boolean
+}) {
+  return (
+    <div className="flex flex-wrap gap-px border border-[var(--line)] bg-[var(--line)]">
+      {clubs.map((club) => {
+        const active = selected.includes(club.id)
+        return (
+          <button
+            key={club.id}
+            type="button"
+            aria-pressed={active}
+            onClick={() => onToggle(club.id)}
+            className={`min-h-11 min-w-24 flex-1 bg-[var(--paper)] px-2 text-[13px] ${
+              active && struck ? 'text-[var(--muted)] line-through' : ''
             }`}
-          />
-        </span>
-      </button>
-
-      <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-        {categories
-          .filter((category) => category.id !== 'other')
-          .map((category) => {
-            const active = filters.categoryIds.includes(category.id)
-            return (
-              <button
-                key={category.id}
-                type="button"
-                onClick={() => toggleCategory(category.id)}
-                className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full ${
-                  active ? 'bg-[#12151c] text-white' : 'bg-[#f4f7fb] text-[var(--muted)] hover:text-[var(--ink)]'
-                }`}
-              >
-                {category.name}
-              </button>
-            )
-          })}
-      </div>
+            style={active ? { boxShadow: `inset 0 -2px 0 ${club.color}`, fontWeight: struck ? 500 : 600 } : undefined}
+          >
+            {club.name}
+          </button>
+        )
+      })}
     </div>
   )
 }

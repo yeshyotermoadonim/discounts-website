@@ -12,9 +12,9 @@ interface LogoImageProps {
 }
 
 const sizeConfig: Record<LogoSize, { px: number; containerClass: string; textClass: string }> = {
-  sm: { px: 40, containerClass: 'w-10 h-10 rounded-xl', textClass: 'text-sm font-bold' },
-  md: { px: 64, containerClass: 'w-14 h-14 rounded-2xl', textClass: 'text-lg font-bold' },
-  lg: { px: 96, containerClass: 'w-20 h-20 rounded-2xl', textClass: 'text-2xl font-black' },
+  sm: { px: 36, containerClass: 'w-9 h-9', textClass: 'text-sm font-medium' },
+  md: { px: 56, containerClass: 'w-14 h-14', textClass: 'text-lg font-medium' },
+  lg: { px: 72, containerClass: 'w-16 h-16', textClass: 'text-xl font-medium' },
 }
 
 export function LogoImage({ logoUrl, brandName, size = 'md' }: LogoImageProps) {
@@ -27,7 +27,7 @@ export function LogoImage({ logoUrl, brandName, size = 'md' }: LogoImageProps) {
   if (!logoUrl || error) {
     return (
       <div
-        className={`${containerClass} bg-[#f3f4f6] border border-[var(--line)] flex items-center justify-center flex-shrink-0`}
+        className={`${containerClass} bg-[var(--paper)] border border-[var(--line)] flex items-center justify-center flex-shrink-0`}
         aria-label={brandName}
       >
         <span className={`${textClass} text-[var(--ink)] select-none`}>
@@ -39,7 +39,7 @@ export function LogoImage({ logoUrl, brandName, size = 'md' }: LogoImageProps) {
 
   return (
     <div
-      className={`${containerClass} relative bg-white border border-[var(--line)] p-1 flex items-center justify-center flex-shrink-0 overflow-hidden`}
+      className={`${containerClass} relative bg-[var(--paper)] border border-[var(--line)] p-0.5 flex items-center justify-center flex-shrink-0 overflow-hidden`}
     >
       {!loaded && (
         <div className="absolute inset-0 bg-zinc-100 animate-pulse rounded-2xl" />
@@ -49,7 +49,7 @@ export function LogoImage({ logoUrl, brandName, size = 'md' }: LogoImageProps) {
         alt={`לוגו ${brandName}`}
         width={px}
         height={px}
-        className={`object-contain max-h-full max-w-full rounded-xl transition-opacity duration-300 ${
+        className={`object-contain max-h-full max-w-full transition-opacity duration-300 ${
           loaded ? 'opacity-100' : 'opacity-0'
         }`}
         onLoad={() => setLoaded(true)}

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     description: 'בדקו באילו מועדונים מותג זמין.',
     locale: 'he_IL',
     type: 'website',
+    images: ['/yeshyo-logo.jpeg'],
   },
 }
 
@@ -29,7 +30,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
-        <meta name="theme-color" content="#12151c" />
+        <meta name="theme-color" content="#f3f0e8" />
       </head>
       <body className="min-h-full flex flex-col antialiased">
         <Header />
